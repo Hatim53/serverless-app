@@ -7,6 +7,7 @@ import logging
 import urllib
 
 from botocore.exceptions import ClientError
+logging.basicConfig(format='[%(levelname)s] %(asctime)s: %(message)s', level=logging.INFO)
 
 
 def add_record(record, table):
@@ -59,9 +60,12 @@ def read_csv_from_s3(s3_bucket, s3_key):
 
 
 def lambda_handler(event, context):
-
-    bucket = event['Records'][0]['s3']['bucket']['name']
-    key = event['Records'][0]['s3']['object']['key']
+    if event is None:
+        bucket = "user-travel-history-bucket"
+        key = "user_travel_history.csv"
+    else:
+        bucket = event['Records'][0]['s3']['bucket']['name']
+        key = event['Records'][0]['s3']['object']['key']
 
     data = read_csv_from_s3(bucket, key)
 
@@ -72,3 +76,7 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': json.dumps("CSV uploaded to DynamoDb Successfully")
     }
+
+
+if __name__ == '__main__':
+    lambda_handler(event=None, context=None)
