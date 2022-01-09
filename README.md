@@ -1,3 +1,8 @@
+Serverless Application using Lambda on AWS
+=================================
+
+![](doc/csv.png)
+
 ## Introduction
 
 This project reads the `csv` from `AWS S3` and put the records in `AWS Dynamodb` table.
